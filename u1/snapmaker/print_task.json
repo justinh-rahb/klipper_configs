@@ -1,0 +1,160 @@
+{
+    "filament_vendor": [
+        "Generic",
+        "Generic",
+        "Generic",
+        "Generic"
+    ],
+    "filament_type": [
+        "PETG",
+        "PETG",
+        "PETG",
+        "PCTG"
+    ],
+    "filament_sub_type": [
+        "",
+        "",
+        "",
+        ""
+    ],
+    "filament_color": [
+        4294967295,
+        4278204278,
+        4293340957,
+        4278190080
+    ],
+    "filament_color_rgba": [
+        "FFFFFFFF",
+        "003776FF",
+        "E72F1DFF",
+        "000000FF"
+    ],
+    "filament_official": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "filament_sku": [
+        0,
+        0,
+        0,
+        0
+    ],
+    "filament_edit": [
+        true,
+        true,
+        true,
+        true
+    ],
+    "filament_exist": [
+        true,
+        true,
+        true,
+        true
+    ],
+    "filament_soft": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "extruder_map_table": [
+        0,
+        1,
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "extruders_used": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "extruders_replenished": [
+        0,
+        1,
+        2,
+        3
+    ],
+    "time_lapse_camera": false,
+    "auto_bed_leveling": false,
+    "flow_calibrate": false,
+    "shaper_calibrate": false,
+    "auto_replenish_filament": true,
+    "filament_entangle_detect": true,
+    "reprint_info": {
+        "auto_bed_leveling": true,
+        "flow_calibrate": false,
+        "time_lapse_camera": true,
+        "extruder_map_table": [
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "extruders_used": [
+            false,
+            false,
+            false,
+            true
+        ]
+    },
+    "filament_entangle_sen": "low"
+}

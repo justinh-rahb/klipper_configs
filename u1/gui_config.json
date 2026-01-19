@@ -1,0 +1,18 @@
+{
+	"system":	{
+		"guide_pass":	1,
+		"language":	"en-GB",
+		"screen_close_time_new":	300,
+		"wifi_compatible":	0,
+		"wifi_opened":	1,
+		"auto_color_mapping":	1
+	},
+	"calibration":	{
+		"offset_pass":	1,
+		"bedmesh_pass":	1,
+		"shaper_pass":	1
+	},
+	"factory":	{
+		"full_test_pass":	0
+	}
+}

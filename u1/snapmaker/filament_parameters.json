@@ -1,0 +1,385 @@
+{
+    "version": "0.0.5",
+    "PLA": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 170,
+                "is_soft": false,
+                "flow_temp": 220,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        },
+        "vendor_Snapmaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 170,
+                "is_soft": false,
+                "flow_temp": 220,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        },
+        "vendor_Polymaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 170,
+                "is_soft": false,
+                "flow_temp": 220,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PLA-CF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 170,
+                "is_soft": false,
+                "flow_temp": 220,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "TPU": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": true,
+                "flow_temp": 240,
+                "flow_k": 0.28,
+                "flow_slow_v": 0.4,
+                "flow_fast_v": 1.8,
+                "flow_k_min": 0.2,
+                "flow_k_max": 0.36
+            }
+        },
+        "vendor_Snapmaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": true,
+                "flow_temp": 240,
+                "flow_k": 0.28,
+                "flow_slow_v": 0.4,
+                "flow_fast_v": 1.8,
+                "flow_k_min": 0.2,
+                "flow_k_max": 0.36
+            }
+        }
+    },
+    "PETG": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.04,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.02,
+                "flow_k_max": 0.06
+            },
+            "sub_HF": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.025,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.013,
+                "flow_k_max": 0.037
+            }
+        },
+        "vendor_Snapmaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.05,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.038,
+                "flow_k_max": 0.062
+            }
+        },
+        "vendor_Polymaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.05,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.038,
+                "flow_k_max": 0.062
+            }
+        }
+    },
+    "PETG-CF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.025,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.013,
+                "flow_k_max": 0.037
+            }
+        }
+    },
+    "PETG-HF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.025,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.013,
+                "flow_k_max": 0.037
+            }
+        }
+    },
+    "PCTG": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 200,
+                "is_soft": false,
+                "flow_temp": 255,
+                "flow_k": 0.04,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.02,
+                "flow_k_max": 0.06
+            }
+        }
+    },
+    "EVA": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 160,
+                "is_soft": true,
+                "flow_temp": 210,
+                "flow_k": 0.28,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 5.0,
+                "flow_k_min": 0.2,
+                "flow_k_max": 0.36
+            }
+        }
+    },
+    "ABS": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 265,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        },
+        "vendor_Snapmaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 265,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.005,
+                "flow_k_max": 0.065
+            }
+        },
+        "vendor_Polymaker": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 265,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "ASA": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 250,
+                "unload_temp": 250,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 260,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.012,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PA": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 250,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.01,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PA-CF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 240,
+                "is_soft": false,
+                "flow_temp": 250,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.01,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PA6-CF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 240,
+                "is_soft": false,
+                "flow_temp": 250,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.01,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PA-GF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 240,
+                "is_soft": false,
+                "flow_temp": 250,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.01,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PA6-GF": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 240,
+                "is_soft": false,
+                "flow_temp": 250,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.01,
+                "flow_k_max": 0.028
+            }
+        }
+    },
+    "PC": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 280,
+                "flow_k": 0.025,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.017,
+                "flow_k_max": 0.033
+            }
+        }
+    },
+    "PC-ABS": {
+        "vendor_generic": {
+            "sub_generic": {
+                "load_temp": 300,
+                "unload_temp": 300,
+                "clean_nozzle_temp": 220,
+                "is_soft": false,
+                "flow_temp": 270,
+                "flow_k": 0.02,
+                "flow_slow_v": 0.8,
+                "flow_fast_v": 8.0,
+                "flow_k_min": 0.005,
+                "flow_k_max": 0.065
+            }
+        }
+    }
+}

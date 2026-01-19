@@ -1,0 +1,1 @@
+{"factor": {"extruder": 0.02559, "extruder1": 0.04, "extruder2": 0.04, "extruder3": 0.04}, "env": {"k_min": 0.005, "k_max": 0.065, "k_step": 0.005, "start_vel": 4, "start_dist": 20, "slow_vel": 0.8, "slow_dist": 0.8, "fast_dist": 2, "fast_vel": 8, "accel": 200, "loop": 14}}
