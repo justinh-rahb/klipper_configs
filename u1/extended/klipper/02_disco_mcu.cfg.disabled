@@ -1,0 +1,10 @@
+[mcu disco]
+serial: /dev/serial/by-id/usb-Klipper_rp2350_5EFD289DC600DC42-if00
+
+[neopixel disco_led]
+pin: disco:gpio16
+chain_count: 1
+color_order: RGB
+initial_RED: 0.0
+initial_GREEN: 0.0
+initial_BLUE: 0.0
