@@ -1,0 +1,415 @@
+# ==== DISCO LED HOOKS ====
+# Overwrites fluidd.cfg macros to add status light functionality
+# NOTE: fluidd.cfg already did rename_existing for CANCEL_PRINT and SHAPER_CALIBRATE
+# We just overwrite the macro definitions and call the _BASE versions
+
+[delayed_gcode startup_status_light]
+initial_duration: 3.0
+gcode:
+    DISCO_COMPLETE
+    DISCO_IDLE
+    #STATUS_READY
+
+[gcode_macro SM_PRINT_START_LINE]
+gcode:
+    {% set index = params.INDEX | default(999) | int %}
+    {% set target_temp = params.TARGET_TEMP | default(0) | int %}
+
+    {% if index >= 0 and index < 8 and target_temp != 0 %}
+        # DISCO LED ADDITION - Show heating status
+        STATUS_HEATING
+        
+        G90
+        G0 Z3 F5000
+        {% if printer.print_task_config['extruder_map_table'][index] == 0 %}
+            SM_PRINT_START_LINE_EXTRUDER_0 {rawparams}
+        {% elif printer.print_task_config['extruder_map_table'][index] == 1 %}
+            SM_PRINT_START_LINE_EXTRUDER_1 {rawparams}
+        {% elif printer.print_task_config['extruder_map_table'][index] == 2 %}
+            SM_PRINT_START_LINE_EXTRUDER_2 {rawparams}
+        {% elif printer.print_task_config['extruder_map_table'][index] == 3 %}
+            SM_PRINT_START_LINE_EXTRUDER_3 {rawparams}
+        {% endif %}
+        
+        # DISCO LED ADDITION - Switch to running after heating completes
+        STATUS_RUNNING
+    {% endif %}
+
+[gcode_macro INNER_PAUSE]
+description: Pause the actual running print
+variable_pause_temp: 40
+gcode:
+    ##### get user parameters or use default #####
+    {% set client = printer['gcode_macro _CLIENT_VARIABLE'] | default({}) %}
+    {% set move_z_max_heigh = client.move_z_max_heigh | default(270.5) | abs %}
+    ##### end of definitions #####
+
+    # restore extruder info
+    {% set extruder = printer[printer.toolhead.extruder].extruder_index %}
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=last_extruder_index VALUE={extruder}
+    {% set temp = printer[printer.toolhead.extruder].target if printer.toolhead.extruder != '' else 0 %}
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=last_extruder_temp VALUE={temp}
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=extruder0_temp VALUE={printer['extruder'].target}
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=extruder1_temp VALUE={printer['extruder1'].target}
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=extruder2_temp VALUE={printer['extruder2'].target}
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=extruder3_temp VALUE={printer['extruder3'].target}
+
+    PAUSE_BASE
+    _CLIENT_RETRACT
+
+    {% if printer['extruder'].target > 0 %}
+        M104 S{pause_temp} T0 A0
+    {% endif %}
+    {% if printer['extruder1'].target > 0 %}
+        M104 S{pause_temp} T1 A0
+    {% endif %}
+    {% if printer['extruder2'].target > 0 %}
+        M104 S{pause_temp} T2 A0
+    {% endif %}
+    {% if printer['extruder3'].target > 0 %}
+        M104 S{pause_temp} T3 A0
+    {% endif %}
+
+    # move to dest position
+    {% if params.ON_ERROR | default(0) | int == 0 %}
+        {% set current_pos = printer.gcode_move.gcode_position %}
+        {% set delta_z = 0.0 %}
+        {% if current_pos.z < move_z_max_heigh - 5.0 %}
+            {% set delta_z = 5.0 %}
+        {% elif current_pos.z < move_z_max_heigh %}
+            {% set delta_z = move_z_max_heigh - current_pos.z %}
+        {% else %}
+            {% set delta_z = 0.0 %}
+        {% endif %}
+        {% if "xyz" in printer.toolhead.homed_axes %}
+            MOVE_TO_DISCARD_FILAMENT_POSITION SPEED=500 ACCEL=10000 Z_OFFSET={delta_z}
+        {% else %}
+            RESPOND TYPE=echo MSG='Printer not homed'
+        {% endif %}
+    {% endif %}
+
+    {% if params.IS_RUNOUT | default(0) | int != 0 %}
+        FEEDING_RUNOUT_EVENT_HANDLE EXTRUDER={extruder}
+
+    {% elif params.ON_ERROR | default(0) | int != 0 %}
+        SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=is_pause_on_err VALUE=True
+
+    {% endif %}
+
+    # turn off fans
+    M107
+    M107 P2
+    M107 P3
+
+    # set idle_timeout time
+    SET_IDLE_TIMEOUT TIMEOUT={printer.configfile.settings.idle_timeout.timeout_on_pause}
+
+    # output some log
+    GET_POSITION
+    M118 extruder0 temp : {printer['extruder'].target}
+    M118 extruder1 temp : {printer['extruder1'].target}
+    M118 extruder2 temp : {printer['extruder2'].target}
+    M118 extruder3 temp : {printer['extruder3'].target}
+    M118 last extruder index : {last_extruder_index}
+    # DISCO LED ADDITION
+    STATUS_PAUSED
+
+[gcode_macro INNER_RESUME]
+description: Resume the actual running print
+variable_last_extruder_index: 0
+variable_last_extruder_temp: 0
+variable_extruder0_temp: 0
+variable_extruder1_temp: 0
+variable_extruder2_temp: 0
+variable_extruder3_temp: 0
+variable_is_pause_on_err: False
+variable_flow_calibrating: False
+variable_flow_calibrate_temp: 220
+gcode:
+    ##### get user parameters or use default #####
+    {% set client = printer['gcode_macro _CLIENT_VARIABLE'] | default({}) %}
+    {% set velocity = printer.configfile.settings.pause_resume.recover_velocity %}
+    {% set sp_move = client.speed_move | default(velocity) %}
+    {% set unretract = client.unretract | default(0.0) %}
+    {% set retract = client.retract | default(5.0) | abs %}
+    ##### end of definitions #####
+
+    {% set can_resume = True %}
+    {% set error_id = 522 %}
+    {% set error_index = 0 %}
+    {% set error_code = 0 %}
+    {% set error_message = "resume error" %}
+    {% set is_homed_z_before_paused = True %}
+    {% set not_edit_filament = False %}
+    {% set is_filament_exist = True %}
+    {% set e_pos = 0 %}
+
+    {% if params.REPLENISH | default(0) | int != 0 %}
+        SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=last_extruder_index VALUE={params.REPLENISH_EXTRUDER}
+        {% set last_extruder_index = params.REPLENISH_EXTRUDER | default(last_extruder_index) | int %}
+    {% endif %}
+
+    {% if last_extruder_index == 0 %}
+        {% set e_pos = printer['extruder'].printing_e_pos | float | abs %}
+    {% else %}
+        {% set e_pos = printer['extruder%d' % (last_extruder_index)].printing_e_pos | float | abs %}
+    {% endif %}
+
+    {% if retract >= e_pos %}
+        {% if unretract >= e_pos %}
+            {% set unretract = unretract - e_pos %}
+        {% else %}
+            {% set unretract = 0 %}
+        {% endif %}
+    {% else %}
+        {% set retract = e_pos + retract - unretract %}
+        {% set unretract = 0 %}
+    {% endif %}
+
+    {% set runout_sensor_name = "e%d_filament" % (last_extruder_index)  %}
+    {% set runout_sensor = "filament_motion_sensor e%d_filament" % (last_extruder_index) %}
+
+    {% if "z" not in printer.toolhead.homed_axes %}
+        {% set is_homed_z_before_paused = False %}
+    {% endif %}
+
+    {% if printer.print_task_config['filament_exist'][last_extruder_index] == False %}
+        {% set is_filament_exist = False %}
+    {% endif %}
+
+    {% if printer.print_task_config['filament_type'][last_extruder_index] == 'NONE' %}
+        {% set not_edit_filament = True %}
+    {% endif %}
+
+    {% if is_homed_z_before_paused == True %}
+        {% if not_edit_filament == True or is_filament_exist == False %}
+            {% set can_resume = False %}
+        {% endif %}
+    {% endif %}
+
+    {% if can_resume == True %}
+        {% if params.REPLENISH | default(0) | int != 0 %}
+            SET_ACTION_CODE ACTION=PRINT_REPLENISHING
+        {% else %}
+            SET_ACTION_CODE ACTION=PRINT_RESUMING
+        {% endif %}
+
+        M118 last extruder temp is {last_extruder_temp}, last extruder index is {last_extruder_index}
+
+        # go home
+        {% if is_pause_on_err or "xy" not in printer.toolhead.homed_axes %}
+            # DISCO LED ADDITION
+            STATUS_HOMING
+            G28 X Y
+        {% endif %}
+
+        # restore extruder
+        T{last_extruder_index} A0
+
+        # auto feeding
+        SM_PRINT_AUTO_FEED EXTRUDER={last_extruder_index}
+        MOVE_TO_DISCARD_FILAMENT_POSITION
+
+        {% if is_homed_z_before_paused == True %}
+            # Check the filament runout-sensor status
+            G4 P200
+            M400
+            CHECK_FILAMENT_RUNOUT SENSOR={runout_sensor_name}
+
+            # restore extruder temps
+            M107
+            M104 S{extruder0_temp} T0 A0
+            M104 S{extruder1_temp} T1 A0
+            M104 S{extruder2_temp} T2 A0
+            M104 S{extruder3_temp} T3 A0
+
+            # restore idle_timeout time
+            SET_IDLE_TIMEOUT TIMEOUT={printer.configfile.settings.idle_timeout.timeout_on_pause}
+            
+            # DISCO LED ADDITION - Show heating during warmup
+            STATUS_HEATING
+            
+            # restore extruder temps
+            {% if extruder0_temp >= 170 %}
+                M109 S{extruder0_temp} T0 A0
+            {% endif %}
+            {% if extruder1_temp >= 170 %}
+                M109 S{extruder1_temp} T1 A0
+            {% endif %}
+            {% if extruder2_temp >= 170 %}
+                M109 S{extruder2_temp} T2 A0
+            {% endif %}
+            {% if extruder3_temp >= 170 %}
+                M109 S{extruder3_temp} T3 A0
+            {% endif %}
+            # extrude fialment
+            {% if last_extruder_temp > 170 %}
+                M109 S{last_extruder_temp} T{last_extruder_index} A0
+                INNER_APPLY_FLOW_K EXTRUDER={printer.toolhead.extruder} APPLY=1
+                _CLIENT_EXTRUDE LENGTH=20 SPEED=2
+                INNER_APPLY_FLOW_K EXTRUDER={printer.toolhead.extruder} APPLY=0
+                _CLIENT_RETRACT LENGTH={retract}
+                M400
+                M106 S255
+            {% else %}
+                M106 S255
+                M109 S{last_extruder_temp} T{last_extruder_index} A0
+                {% set unretract = 0.0 %}
+            {% endif %}
+            # clean nozzle
+            M204 S10000
+            M106 S255
+            INNER_CUTOFF_BASE_DISCARD
+            INNER_ROUGHLY_CLEAN_NOZZLE_BASE_DISCARD
+            INNER_DISCARD_FILAMENT_BASE_DISCARD
+            G90
+            G1 Y250 F12000
+            # check filament sensor
+            CHECK_FILAMENT_RUNOUT SENSOR={runout_sensor_name}
+
+            # RESUME_BASE
+            RESUME_BASE VELOCITY={params.VELOCITY | default(sp_move)} MOVE_ACCEL=10000 EXTRUDE={unretract}
+        {% else %}
+            RESUME_BASE VELOCITY={params.VELOCITY | default(sp_move)} MOVE=0
+        {% endif %}
+        SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=is_pause_on_err VALUE=False
+        # DISCO LED ADDITION
+        STATUS_RUNNING
+    {% else %}
+        {% if is_filament_exist == False %}
+            {% set error_id = 523 %}
+            {% set error_index = last_extruder_index %}
+            {% set error_code = 0 %}
+            {% set error_message = "e%d filament runout" % (last_extruder_index) %}
+        {% elif not_edit_filament == True %}
+            {% set error_id = 523 %}
+            {% set error_index = last_extruder_index %}
+            {% set error_code = 39 %}
+            {% set error_message = "e%d not edit filament" % (last_extruder_index) %}
+        {% else %}
+            {% set error_id = 522 %}
+            {% set error_index = 0 %}
+            {% set error_code = 0 %}
+            {% set error_message = "resume error" %}
+        {% endif %}
+        RAISE_EXCEPTION ID={error_id} INDEX={error_index} CODE={error_code} MSG='{"%s" % error_message}' LEVEL=2
+    {% endif %}
+    SET_ACTION_CODE ACTION=IDLE
+
+[gcode_macro PRINT_END]
+gcode:
+    M220 S100
+    ##### get user parameters or use default #####
+    {% set client = printer['gcode_macro _CLIENT_VARIABLE'] | default({}) %}
+    {% set retract = client.cancel_retract | default(5.0) | abs %}
+    {% set move_z_max_heigh = client.move_z_max_heigh | default(270.5) | abs %}
+    ##### end of definitions #####
+
+    _CLIENT_RETRACT LENGTH={retract}
+
+    {% set current_pos = printer.gcode_move.gcode_position %}
+    {% set delta_z = 0.0 %}
+    {% if "z" in printer.toolhead.homed_axes %}
+        {% if current_pos.z < move_z_max_heigh - 2.0 %}
+            {% set delta_z = 2.0 %}
+        {% elif current_pos.z < move_z_max_heigh %}
+            {% set delta_z = move_z_max_heigh - current_pos.z %}
+        {% else %}
+            {% set delta_z = 0.0 %}
+        {% endif %}
+        G91
+        G0 Z{delta_z} F2000
+    {% endif %}
+    {% if "xy" in printer.toolhead.homed_axes %}
+        PARK_EXTRUDER
+        G90
+        G0 X5 Y5 F3000
+    {% else %}
+        RESPOND TYPE=echo MSG='Printer not homed XY'
+    {% endif %}
+
+    {% if "z" in printer.toolhead.homed_axes %}
+        {% if current_pos.z < 200 %}
+            G90
+            G0 Z200 F2000
+        {% elif current_pos.z < 265 %}
+            G91
+            G0 Z3 F2000
+        {% endif %}
+        G90
+    {% else %}
+        RESPOND TYPE=echo MSG='Printer not homed Z'
+    {% endif %}
+
+    TURN_OFF_HEATERS
+    M107
+    M107 P2 S0
+    SET_PAUSE_NEXT_LAYER ENABLE=0
+    SET_PAUSE_AT_LAYER ENABLE=0 LAYER=0
+    M84
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=is_pause_on_err VALUE=False
+    SET_IDLE_TIMEOUT TIMEOUT={printer.configfile.settings.idle_timeout.timeout}
+    # DISCO LED ADDITION
+    STATUS_COMPLETE
+
+[gcode_macro CANCEL_PRINT]
+description: Cancel the actual running print
+gcode:
+    # DISCO LED ADDITION
+    DISCO_ERROR
+    STATUS_ERROR
+    M220 S100
+    ##### get user parameters or use default #####
+    {% set client = printer['gcode_macro _CLIENT_VARIABLE'] | default({}) %}
+    {% set retract = client.cancel_retract | default(5.0) | abs %}
+    {% set move_z_max_heigh = client.move_z_max_heigh | default(270.5) | abs %}
+    ##### end of definitions #####
+
+    _CLIENT_RETRACT LENGTH={retract}
+    {% set current_pos = printer.gcode_move.gcode_position %}
+    {% set delta_z = 0.0 %}
+    # move to dest position
+    {% if "z" in printer.toolhead.homed_axes %}
+        {% if current_pos.z < 200 %}
+            G90
+            G0 Z200 F2000
+        {% elif current_pos.z < 265 %}
+            G91
+            G0 Z5 F2000
+        {% else %}
+            {% if current_pos.z < move_z_max_heigh - 2.0 %}
+                {% set delta_z = 2.0 %}
+            {% elif current_pos.z < move_z_max_heigh %}
+                {% set delta_z = move_z_max_heigh - current_pos.z %}
+            {% else %}
+                {% set delta_z = 0.0 %}
+            {% endif %}
+            G91
+            G0 Z{delta_z} F2000
+        {% endif %}
+        G90
+    {% else %}
+        RESPOND TYPE=echo MSG='Printer not homed Z'
+    {% endif %}
+
+    CANCEL_PRINT_BASE
+    TURN_OFF_HEATERS
+    M107
+    M107 P2 S0
+    SET_PAUSE_NEXT_LAYER ENABLE=0
+    SET_PAUSE_AT_LAYER ENABLE=0 LAYER=0
+    M84
+    TIMELAPSE_STOP
+    SET_GCODE_VARIABLE MACRO=INNER_RESUME VARIABLE=is_pause_on_err VALUE=False
+    SET_IDLE_TIMEOUT TIMEOUT={printer.configfile.settings.idle_timeout.timeout}
+    # DISCO LED ADDITION
+    #STATUS_READY
+
+[gcode_macro SHAPER_CALIBRATE]
+gcode:
+    # DISCO LED ADDITION
+    STATUS_LEVELING
+    SHAPER_CALIBRATE_BASE {rawparams}
+    SAVE_CONFIG RESTART=0
+    # DISCO LED ADDITION
+    STATUS_READY
