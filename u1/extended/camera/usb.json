@@ -1,9 +1,10 @@
 {
   "auto_exposure": 3,
   "exposure_time_absolute": 999,
-  "focus_absolute": 62,
+  "focus_absolute": 69,
   "focus_automatic_continuous": 0,
   "power_line_frequency": 2,
+  "sharpness": 0,
   "white_balance_automatic": 1,
   "white_balance_temperature": 3805
 }

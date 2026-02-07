@@ -2,7 +2,7 @@
 	"system":	{
 		"guide_pass":	1,
 		"language":	"en-GB",
-		"screen_close_time_new":	300,
+		"screen_close_time_new":	1800,
 		"wifi_compatible":	0,
 		"wifi_opened":	1,
 		"auto_color_mapping":	1

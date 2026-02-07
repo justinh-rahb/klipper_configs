@@ -1,24 +1,24 @@
 {
     "extruder": {
-        "switch_count": 2382,
+        "switch_count": 2461,
         "retry_count": 8,
         "error_count": 1,
         "last_maintenance_count": 0
     },
     "extruder1": {
-        "switch_count": 2083,
+        "switch_count": 2162,
         "retry_count": 0,
         "error_count": 0,
         "last_maintenance_count": 0
     },
     "extruder2": {
-        "switch_count": 2392,
+        "switch_count": 2525,
         "retry_count": 0,
         "error_count": 0,
         "last_maintenance_count": 0
     },
     "extruder3": {
-        "switch_count": 2992,
+        "switch_count": 3020,
         "retry_count": 1,
         "error_count": 0,
         "last_maintenance_count": 0

@@ -1,39 +1,39 @@
 {
     "filament_vendor": [
-        "Generic",
-        "Generic",
-        "Generic",
-        "Generic"
+        "3D Printing Canada",
+        "Spectrum",
+        "Polymaker",
+        "SUNLU"
     ],
     "filament_type": [
-        "PETG",
-        "PETG",
-        "PETG",
-        "PCTG"
+        "TPU",
+        "PLA",
+        "PLA",
+        "PETG-CF"
     ],
     "filament_sub_type": [
-        "",
-        "",
-        "",
-        ""
+        "Basic",
+        "Basic",
+        "Basic",
+        "Basic"
     ],
     "filament_color": [
-        4294967295,
-        4278204278,
-        4293340957,
-        4278190080
+        4279637526,
+        4287533193,
+        4281161729,
+        4279637526
     ],
     "filament_color_rgba": [
-        "FFFFFFFF",
-        "003776FF",
-        "E72F1DFF",
-        "000000FF"
+        "161616FF",
+        "8E9089FF",
+        "2D5801FF",
+        "161616FF"
     ],
     "filament_official": [
-        false,
-        false,
-        false,
-        false
+        true,
+        true,
+        true,
+        true
     ],
     "filament_sku": [
         0,
@@ -42,10 +42,10 @@
         0
     ],
     "filament_edit": [
-        true,
-        true,
-        true,
-        true
+        false,
+        false,
+        false,
+        false
     ],
     "filament_exist": [
         true,
@@ -54,7 +54,7 @@
         true
     ],
     "filament_soft": [
-        false,
+        true,
         false,
         false,
         false
@@ -114,12 +114,18 @@
     "reprint_info": {
         "auto_bed_leveling": true,
         "flow_calibrate": false,
-        "time_lapse_camera": true,
+        "flow_calib_extruders": [
+            true,
+            false,
+            false,
+            false
+        ],
+        "time_lapse_camera": false,
         "extruder_map_table": [
             2,
-            3,
-            3,
+            1,
             0,
+            3,
             0,
             0,
             0,
@@ -151,10 +157,124 @@
         ],
         "extruders_used": [
             false,
+            true,
             false,
-            false,
-            true
+            false
         ]
     },
-    "filament_entangle_sen": "low"
+    "filament_entangle_sen": "medium",
+    "flow_calib_extruders": [
+        true,
+        true,
+        true,
+        true
+    ],
+    "filament_spool_id": [
+        0,
+        null,
+        0,
+        0
+    ],
+    "filament_rfid": [
+        {
+            "VERSION": 1,
+            "VENDOR": "3D Printing Canada",
+            "MANUFACTURER": "3D Printing Canada",
+            "MAIN_TYPE": "TPU",
+            "SUB_TYPE": "Basic",
+            "TRAY": 0,
+            "ALPHA": 255,
+            "COLOR_NUMS": 1,
+            "ARGB_COLOR": 4279637526,
+            "RGB_1": 1447446,
+            "RGB_2": 0,
+            "RGB_3": 0,
+            "RGB_4": 0,
+            "RGB_5": 0,
+            "DIAMETER": 175,
+            "WEIGHT": 0,
+            "LENGTH": 0,
+            "DRYING_TEMP": 0,
+            "DRYING_TIME": 0,
+            "HOTEND_MAX_TEMP": 230,
+            "HOTEND_MIN_TEMP": 210,
+            "BED_TYPE": 0,
+            "BED_TEMP": 30,
+            "FIRST_LAYER_TEMP": 210,
+            "OTHER_LAYER_TEMP": 210,
+            "SKU": 0,
+            "MF_DATE": "19700101",
+            "RSA_KEY_VERSION": 0,
+            "OFFICIAL": true,
+            "CARD_UID": [],
+            "SPOOL_ID": 0
+        },
+        null,
+        {
+            "VERSION": 1,
+            "VENDOR": "Polymaker",
+            "MANUFACTURER": "Polymaker",
+            "MAIN_TYPE": "PLA",
+            "SUB_TYPE": "Basic",
+            "TRAY": 0,
+            "ALPHA": 255,
+            "COLOR_NUMS": 1,
+            "ARGB_COLOR": 4281161729,
+            "RGB_1": 2971649,
+            "RGB_2": 0,
+            "RGB_3": 0,
+            "RGB_4": 0,
+            "RGB_5": 0,
+            "DIAMETER": 175,
+            "WEIGHT": 0,
+            "LENGTH": 0,
+            "DRYING_TEMP": 0,
+            "DRYING_TIME": 0,
+            "HOTEND_MAX_TEMP": 220,
+            "HOTEND_MIN_TEMP": 190,
+            "BED_TYPE": 0,
+            "BED_TEMP": 50,
+            "FIRST_LAYER_TEMP": 190,
+            "OTHER_LAYER_TEMP": 190,
+            "SKU": 0,
+            "MF_DATE": "19700101",
+            "RSA_KEY_VERSION": 0,
+            "OFFICIAL": true,
+            "CARD_UID": [],
+            "SPOOL_ID": 0
+        },
+        {
+            "VERSION": 1,
+            "VENDOR": "SUNLU",
+            "MANUFACTURER": "SUNLU",
+            "MAIN_TYPE": "PETG-CF",
+            "SUB_TYPE": "Basic",
+            "TRAY": 0,
+            "ALPHA": 255,
+            "COLOR_NUMS": 1,
+            "ARGB_COLOR": 4279637526,
+            "RGB_1": 1447446,
+            "RGB_2": 0,
+            "RGB_3": 0,
+            "RGB_4": 0,
+            "RGB_5": 0,
+            "DIAMETER": 175,
+            "WEIGHT": 0,
+            "LENGTH": 0,
+            "DRYING_TEMP": 0,
+            "DRYING_TIME": 0,
+            "HOTEND_MAX_TEMP": 260,
+            "HOTEND_MIN_TEMP": 230,
+            "BED_TYPE": 0,
+            "BED_TEMP": 70,
+            "FIRST_LAYER_TEMP": 230,
+            "OTHER_LAYER_TEMP": 230,
+            "SKU": 0,
+            "MF_DATE": "19700101",
+            "RSA_KEY_VERSION": 0,
+            "OFFICIAL": true,
+            "CARD_UID": [],
+            "SPOOL_ID": 0
+        }
+    ]
 }

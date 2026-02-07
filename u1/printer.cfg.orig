@@ -221,7 +221,7 @@ uart_pin: PB4
 diag_pin: ^PC15
 uart_address: 0
 driver_SGTHRS: 110
-run_current: 0.7
+run_current: 0.85
 
 [heater_bed]
 heater_pin: PE9
@@ -747,6 +747,22 @@ heater: extruder
 heater_temp: 45
 fan_speed: 1
 probe_speed: 0.5
+stepped_temp_table:
+  45, 0.3
+  60, 0.35
+  70, 0.4
+  100, 0.45
+  140, 0.5
+  160, 0.6
+  180, 0.65
+  200, 0.7
+  220, 0.75
+  230, 0.8
+  240, 0.85
+  260, 0.9
+external_temp_sensor: cavity            # [temperature_sensor cavity]
+external_temp_guard_range: -15.0, 45.0  # Guard temperature range [min, max]
+external_temp_guard_fan_speed: 1.0      # Fan speed when temperature outside guard range
 # tachometer_ppr:1
 tachometer_poll_interval: 0.0005
 max_power: 1
@@ -879,6 +895,22 @@ heater: extruder1
 heater_temp: 45
 fan_speed: 1
 probe_speed: 0.5
+stepped_temp_table:
+  45, 0.3
+  60, 0.35
+  70, 0.4
+  100, 0.45
+  140, 0.5
+  160, 0.6
+  180, 0.65
+  200, 0.7
+  220, 0.75
+  230, 0.8
+  240, 0.85
+  260, 0.9
+external_temp_sensor: cavity            # [temperature_sensor cavity]
+external_temp_guard_range: -15.0, 45.0  # Guard temperature range [min, max]
+external_temp_guard_fan_speed: 1.0      # Fan speed when temperature outside guard range
 # tachometer_ppr:1
 tachometer_poll_interval: 0.0005
 max_power: 1
@@ -999,6 +1031,22 @@ heater: extruder2
 heater_temp: 45
 fan_speed: 1
 probe_speed: 0.5
+stepped_temp_table:
+  45, 0.3
+  60, 0.35
+  70, 0.4
+  100, 0.45
+  140, 0.5
+  160, 0.6
+  180, 0.65
+  200, 0.7
+  220, 0.75
+  230, 0.8
+  240, 0.85
+  260, 0.9
+external_temp_sensor: cavity            # [temperature_sensor cavity]
+external_temp_guard_range: -15.0, 45.0  # Guard temperature range [min, max]
+external_temp_guard_fan_speed: 1.0      # Fan speed when temperature outside guard range
 # tachometer_ppr:1
 tachometer_poll_interval: 0.0005
 max_power: 1
@@ -1118,6 +1166,22 @@ heater: extruder3
 heater_temp: 45
 fan_speed: 1
 probe_speed: 0.5
+stepped_temp_table:
+  45, 0.3
+  60, 0.35
+  70, 0.4
+  100, 0.45
+  140, 0.5
+  160, 0.6
+  180, 0.65
+  200, 0.7
+  220, 0.75
+  230, 0.8
+  240, 0.85
+  260, 0.9
+external_temp_sensor: cavity            # [temperature_sensor cavity]
+external_temp_guard_range: -15.0, 45.0  # Guard temperature range [min, max]
+external_temp_guard_fan_speed: 1.0      # Fan speed when temperature outside guard range
 # tachometer_ppr:1
 tachometer_poll_interval: 0.0005
 max_power: 1
