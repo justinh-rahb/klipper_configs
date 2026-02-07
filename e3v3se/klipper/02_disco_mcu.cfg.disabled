@@ -1,5 +1,6 @@
 [mcu disco]
 serial: /dev/serial/by-id/usb-Klipper_rp2350_5EFD289DC600DC42-if00
+is_non_critical: True
 
 [neopixel disco_led]
 pin: disco:gpio16
