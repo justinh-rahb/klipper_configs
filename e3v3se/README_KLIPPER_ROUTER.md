@@ -47,6 +47,21 @@ LED instance files:
 - LED socket (example): `/tmp/klippy_led_uds`
 3. LED controller connected to its own MCU and LED pin configured.
 
+## Step 0: Install klipper-router
+
+Install into `~/klipper-router`:
+
+```bash
+cd /home/pi
+git clone https://github.com/paxx12/klipper-router.git ~/klipper-router
+```
+
+Optional sanity check:
+
+```bash
+/home/pi/klippy-env/bin/python /home/pi/klipper-router/src/klipper_router.py --help
+```
+
 ## Step 1: Configure Router
 
 File: `e3v3se/router/router.cfg`
@@ -173,6 +188,74 @@ Recommended:
 Why:
 - Clears stale router subscriptions.
 - Ensures `ROUTER_ON_CONNECTED` paths run cleanly.
+
+## Systemd Services
+
+Repository copies:
+- `e3v3se/klipper-led.service`
+- `e3v3se/klipper-router.service`
+
+Create the LED Klipper service at `/etc/systemd/system/klipper-led.service`:
+
+```ini
+[Unit]
+Description=Klipper LED Instance
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+RemainAfterExit=yes
+ExecStart=/home/pi/klippy-env/bin/python /home/pi/klipper/klippy/klippy.py /home/pi/printer_data/config/router/instances/led/printer.cfg -a /tmp/klippy_led_uds -l /home/pi/printer_data/logs/klippy_led.log
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Create the router service at `/etc/systemd/system/klipper-router.service`:
+
+```ini
+[Unit]
+Description=Klipper Router
+After=klipper.service klipper-led.service
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/home/pi/klippy-env/bin/python /home/pi/klipper-router/src/klipper_router.py -c /home/pi/printer_data/config/router/router.cfg
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Install from this repo on the host:
+
+```bash
+sudo cp /home/pi/printer_data/config/klipper-led.service /etc/systemd/system/klipper-led.service
+sudo cp /home/pi/printer_data/config/klipper-router.service /etc/systemd/system/klipper-router.service
+```
+
+If your config path is not `/home/pi/printer_data/config`, adjust those `cp` source paths accordingly.
+
+Enable/start:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable klipper-led.service klipper-router.service
+sudo systemctl restart klipper-led.service klipper-router.service
+```
+
+Check status/logs:
+
+```bash
+systemctl status klipper-led.service klipper-router.service
+tail -f /home/pi/printer_data/logs/klippy_led.log
+journalctl -u klipper-router.service -f
+```
 
 ## Validation Checklist
 

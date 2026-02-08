@@ -1,0 +1,14 @@
+[Unit]
+Description=Klipper LED Instance
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+RemainAfterExit=yes
+ExecStart=/home/pi/klippy-env/bin/python /home/pi/klipper/klippy/klippy.py /home/pi/printer_data/config/router/instances/led/printer.cfg -a /tmp/klippy_led_uds -l /home/pi/printer_data/logs/klippy_led.log
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Klipper Router
+After=klipper.service klipper-led.service
+
+[Service]
+Type=simple
+User=pi
+ExecStart=/home/pi/klippy-env/bin/python /home/pi/klipper-router/src/klipper_router.py -c /home/pi/printer_data/config/router/router.cfg
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
